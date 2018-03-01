@@ -33,12 +33,12 @@ case $NUM in
 		echo -e "\nPHASE TWO: Fetch and install the GPG key"
 		echo -e "****************************************\n"
 		
-		if [ -f /home/pi/itimmer.gpg ]
+		if [ -f /home/osmc/itimmer.gpg ]
 		then	
 			echo -e "NOTE: GPG Key Exists - Skipping"
 		else		
 			wget http://archive.itimmer.nl/itimmer.gpg
-			chown pi:pi /home/pi/itimmer.gpg
+			chown osmc:osmc /home/osmc/itimmer.gpg
 			apt-key add itimmer.gpg		
 		fi
 
@@ -59,26 +59,26 @@ case $NUM in
 		echo -e "Once you have input your STEAM PC's IP Address below, you will be given a PIN"
 		echo -e "Input this on the STEAM PC to pair with Moonlight. \n"
 		read -p "Input STEAM PC's IP Address here :`echo $'\n> '`" ip
-		sudo -u pi moonlight pair $ip
+		sudo -u osmc moonlight pair $ip
 		echo -e "\n**** PHASE FIVE Complete!!!! ****"		
 		
 		echo -e "\nPHASE SIX: Create STEAM Menu for RetroPie"
 		echo -e "*****************************************\n"
 		
-		if [ -f /home/pi/.emulationstation/es_systems.cfg ]
+		if [ -f /home/osmc/.emulationstation/es_systems.cfg ]
 		then	
 			echo -e "Removing Duplicate Systems File"
-			rm /home/pi/.emulationstation/es_systems.cfg
+			rm /home/osmc/.emulationstation/es_systems.cfg
 		fi
 		
 		echo -e "Copying Systems Config File"
-		cp /etc/emulationstation/es_systems.cfg /home/pi/.emulationstation/es_systems.cfg
+		cp /etc/emulationstation/es_systems.cfg /home/osmc/.emulationstation/es_systems.cfg
 			
-		if grep -q "<platform>steam</platform>" /home/pi/.emulationstation/es_systems.cfg; then
+		if grep -q "<platform>steam</platform>" /home/osmc/.emulationstation/es_systems.cfg; then
 			echo -e "NOTE: Steam Entry Exists - Skipping"
 		else
 			echo -e "Adding Steam to Systems"
-			sudo sed -i -e 's|</systemList>|  <system>\n    <name>steam</name>\n    <fullname>Steam</fullname>\n    <path>~/RetroPie/roms/moonlight</path>\n    <extension>.sh .SH</extension>\n    <command>bash %ROM%</command>\n    <platform>steam</platform>\n    <theme>steam</theme>\n  </system>\n</systemList>|g' /home/pi/.emulationstation/es_systems.cfg
+			sudo sed -i -e 's|</systemList>|  <system>\n    <name>steam</name>\n    <fullname>Steam</fullname>\n    <path>~/RetroPie/roms/moonlight</path>\n    <extension>.sh .SH</extension>\n    <command>bash %ROM%</command>\n    <platform>steam</platform>\n    <theme>steam</theme>\n  </system>\n</systemList>|g' /home/osmc/.emulationstation/es_systems.cfg
 		fi
 		echo -e "\n**** PHASE SIX Complete!!!! ****"
 
@@ -86,32 +86,32 @@ case $NUM in
 		echo -e "**********************************************************\n"
 		
 		echo -e "Create Script Folder"
-		mkdir -p /home/pi/RetroPie/roms/moonlight
-		cd /home/pi/RetroPie/roms/moonlight
+		mkdir -p /home/osmc/RetroPie/roms/moonlight
+		cd /home/osmc/RetroPie/roms/moonlight
 		
 		echo -e "Create Scripts"
-		if [ -f /home/pi/RetroPie/roms/moonlight/720p30fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/720p30fps.sh ]; then
 			echo -e "NOTE: 720p30fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 720p30fps.sh
 			echo "moonlight stream -720 -fps 30 "$ip"" >>  720p30fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/720p60fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/720p60fps.sh ]; then
 			echo -e "NOTE: 720p60fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 720p60fps.sh
 			echo "moonlight stream -720 -fps 60 "$ip"" >>  720p60fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/1080p30fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/1080p30fps.sh ]; then
 			echo -e "NOTE: 1080p30fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 1080p30fps.sh
 			echo "moonlight stream -1080 -fps 30 "$ip"" >>  1080p30fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/1080p60fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/1080p60fps.sh ]; then
 			echo -e "NOTE: 1080p60fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 1080p60fps.sh
@@ -129,8 +129,8 @@ case $NUM in
 		echo -e "******************************************\n"
 		
 		echo -e "Changing File Permissions"
-		chown -R pi:pi /home/pi/RetroPie/roms/moonlight/
-		chown pi:pi /home/pi/.emulationstation/es_systems.cfg
+		chown -R osmc:osmc /home/osmc/RetroPie/roms/moonlight/
+		chown osmc:osmc /home/osmc/.emulationstation/es_systems.cfg
 
 		echo -e "\n**** PHASE EIGHT Complete!!!! ****\n"
 		echo -e "Everything should now be installed and setup correctly."
@@ -140,7 +140,7 @@ case $NUM in
 		read -p "Reboot Now (y/n)?" choice
 		case "$choice" in 
 		  y|Y ) shutdown -r now;;
-		  n|N ) cd /home/pi
+		  n|N ) cd /home/osmc
 		  ./moonlight.sh
 		  ;;
 		  * ) echo "invalid";;
@@ -151,32 +151,32 @@ case $NUM in
 		echo -e "***********************************************\n"
 		
 		echo -e "Create Script Folder"
-		mkdir -p /home/pi/RetroPie/roms/moonlight
-		cd /home/pi/RetroPie/roms/moonlight
+		mkdir -p /home/osmc/RetroPie/roms/moonlight
+		cd /home/osmc/RetroPie/roms/moonlight
 		
 		echo -e "Create Scripts"
-		if [ -f /home/pi/RetroPie/roms/moonlight/720p30fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/720p30fps.sh ]; then
 			echo -e "NOTE: 720p30fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 720p30fps.sh
 			echo "moonlight stream -720 -fps 30 "$ip"" >>  720p30fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/720p60fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/720p60fps.sh ]; then
 			echo -e "NOTE: 720p60fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 720p60fps.sh
 			echo "moonlight stream -720 -fps 60 "$ip"" >>  720p60fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/1080p30fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/1080p30fps.sh ]; then
 			echo -e "NOTE: 1080p30fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 1080p30fps.sh
 			echo "moonlight stream -1080 -fps 30 "$ip"" >>  1080p30fps.sh
 		fi
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/1080p60fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/1080p60fps.sh ]; then
 			echo -e "NOTE: 1080p60fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 1080p60fps.sh
@@ -190,17 +190,17 @@ case $NUM in
 		chmod +x 1080p60fps.sh
 		
 		echo -e "\n**** 1080p + 720p Launch Scripts Creation Complete!!!! ****"
-		cd /home/pi
+		cd /home/osmc
 		./moonlight.sh
 	;;
 	3)
 		echo -e "\nRemove All Steam Launch Scripts"
 		echo -e "***********************************\n"
-		cd /home/pi/RetroPie/roms/moonlight
+		cd /home/osmc/RetroPie/roms/moonlight
 		rm *
 		
 		echo -e "\n**** Launch Script Removal Complete!!! ****"
-		cd /home/pi
+		cd /home/osmc
 		./moonlight.sh
 	;;
 	4)  
@@ -208,19 +208,19 @@ case $NUM in
 		echo -e "*******************************************\n"
 		
 		echo -e "Create Script Folder"
-		mkdir -p /home/pi/RetroPie/roms/moonlight
-		cd /home/pi/RetroPie/roms/moonlight
+		mkdir -p /home/osmc/RetroPie/roms/moonlight
+		cd /home/osmc/RetroPie/roms/moonlight
 		
 		echo -e "Create 480p Scripts"
 		
-		if [ -f /home/pi/RetroPie/roms/moonlight/480p30fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/480p30fps.sh ]; then
 			echo -e "NOTE: 480p30fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 480p30fps.sh
 			echo "moonlight stream -width 640 -height 480 -fps 30 "$ip"" >>  480p30fps.sh
 		fi
 				
-		if [ -f /home/pi/RetroPie/roms/moonlight/480p60fps.sh ]; then
+		if [ -f /home/osmc/RetroPie/roms/moonlight/480p60fps.sh ]; then
 			echo -e "NOTE: 480p60fps Exists - Skipping"
 		else
 			echo "#!/bin/bash" > 480p60fps.sh
@@ -232,7 +232,7 @@ case $NUM in
 		chmod +x 480p60fps.sh
 		
 		echo -e "\n**** 480p Launch Scripts Creation Complete!!!!"
-		cd /home/pi
+		cd /home/osmc
 		./moonlight.sh
 	;;
 	5) 
@@ -242,10 +242,10 @@ case $NUM in
 		echo -e "Once you have input your STEAM PC's IP Address below, you will be given a PIN"
 		echo -e "Input this on the STEAM PC to pair with Moonlight. \n"
 		read -p "Input STEAM PC's IP Address here :`echo $'\n> '`" ip
-		sudo -u pi moonlight pair $ip
+		sudo -u osmc moonlight pair $ip
 		
 		echo -e "\n**** Re-Pair Process Complete!!!! ****"
-		cd /home/pi
+		cd /home/osmc
 		./moonlight.sh
 	;;
 	6)  exit 1;;
@@ -254,24 +254,24 @@ case $NUM in
 		echo -e "\nRefresh RetroPie Systems File"
 		echo -e "*****************************\n"
 		
-		if [ -f /home/pi/.emulationstation/es_systems.cfg ]
+		if [ -f /home/osmc/.emulationstation/es_systems.cfg ]
 		then	
 			echo -e "Removing Duplicate Systems File"
-			rm /home/pi/.emulationstation/es_systems.cfg
+			rm /home/osmc/.emulationstation/es_systems.cfg
 		fi
 		
 		echo -e "Copying Systems Config File"
-		cp /etc/emulationstation/es_systems.cfg /home/pi/.emulationstation/es_systems.cfg
+		cp /etc/emulationstation/es_systems.cfg /home/osmc/.emulationstation/es_systems.cfg
 			
-		if grep -q "<platform>steam</platform>" /home/pi/.emulationstation/es_systems.cfg; then
+		if grep -q "<platform>steam</platform>" /home/osmc/.emulationstation/es_systems.cfg; then
 			echo -e "NOTE: Steam Entry Exists - Skipping"
 		else
 			echo -e "Adding Steam to Systems"
-			sudo sed -i -e 's|</systemList>|  <system>\n    <name>steam</name>\n    <fullname>Steam</fullname>\n    <path>~/RetroPie/roms/moonlight</path>\n    <extension>.sh .SH</extension>\n    <command>bash %ROM%</command>\n    <platform>steam</platform>\n    <theme>steam</theme>\n  </system>\n</systemList>|g' /home/pi/.emulationstation/es_systems.cfg
+			sudo sed -i -e 's|</systemList>|  <system>\n    <name>steam</name>\n    <fullname>Steam</fullname>\n    <path>~/RetroPie/roms/moonlight</path>\n    <extension>.sh .SH</extension>\n    <command>bash %ROM%</command>\n    <platform>steam</platform>\n    <theme>steam</theme>\n  </system>\n</systemList>|g' /home/osmc/.emulationstation/es_systems.cfg
 		fi
 		
 		echo -e "\n**** Refreshing Retropie Systems File Complete!!!! ****"
-		cd /home/pi
+		cd /home/osmc
 		./moonlight.sh
 	;;
 		
@@ -279,13 +279,13 @@ case $NUM in
 		echo -e "\nUpdate This Script"
 		echo -e "*****************************\n"
 		
-		if [ -f /home/pi/moonlight.sh ]
+		if [ -f /home/osmc/moonlight.sh ]
 		then	
 			echo -e "Removing Script"
-			rm /home/pi/moonlight.sh
+			rm /home/osmc/moonlight.sh
 		fi
 		wget https://techwiztime.com/moonlight.sh --no-check
-		chown pi:pi /home/pi/moonlight.sh
+		chown osmc:osmc /home/osmc/moonlight.sh
 		chmod +x moonlight.sh
 		./moonlight.sh
 	;;
