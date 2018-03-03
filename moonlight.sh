@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo -e "\n****************************************************************"
 echo -e "Welcome to the Moonlight Installer Script for RetroPie v17.10.07"
 echo -e "****************************************************************\n"
@@ -21,11 +20,11 @@ case $NUM in
 		echo -e "\nPHASE ONE: Add Moonlight to Sources List"
 		echo -e "****************************************\n"
 		
-		if grep -q "deb http://archive.itimmer.nl/raspbian/moonlight strech main" /etc/apt/sources.list; then
+		if grep -q "deb http://archive.itimmer.nl/raspbian/moonlight stretch main" /etc/apt/sources.list; then
 			echo -e "NOTE: Moonlight Source Exists - Skipping"
 		else
 			echo -e "Adding Moonlight to Sources List"
-			echo "deb http://archive.itimmer.nl/raspbian/moonlight strech main" >> /etc/apt/sources.list
+			echo "deb http://archive.itimmer.nl/raspbian/moonlight stretch main" >> /etc/apt/sources.list
 		fi
 		
 		echo -e "\n**** PHASE ONE Complete!!!! ****"
